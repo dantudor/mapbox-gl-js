@@ -20,7 +20,7 @@ test('CollisionFeature', (t) => {
         const anchor = new Anchor(point.x, point.y, 0, undefined);
 
         const cf = new CollisionFeature(collisionBoxArray, anchor, 0, 0, 0, shapedText, 1, 0, false);
-        t.notOk(cf.circleLineHeight);
+        t.notOk(cf.circleDiameter);
         t.equal(cf.boxEndIndex - cf.boxStartIndex, 1);
 
         const box = collisionBoxArray.get(cf.boxStartIndex);
@@ -34,8 +34,8 @@ test('CollisionFeature', (t) => {
     test('Compute line height for runtime collision circles (line label)', (t) => {
         const anchor = new Anchor(505, 95, 0, 1);
         const cf = new CollisionFeature(collisionBoxArray, anchor, 0, 0, 0, shapedText, 1, 0, true);
-        t.ok(cf.circleLineHeight);
-        t.equal(cf.circleLineHeight, shapedText.bottom - shapedText.top);
+        t.ok(cf.circleDiameter);
+        t.equal(cf.circleDiameter, shapedText.bottom - shapedText.top);
         t.equal(cf.boxEndIndex - cf.boxStartIndex, 0);
         t.end();
     });
@@ -51,7 +51,7 @@ test('CollisionFeature', (t) => {
         const anchor = new Anchor(505, 95, 0, 1);
         const cf = new CollisionFeature(collisionBoxArray, anchor, 0, 0, 0, shapedText, 1, 0, true);
         t.equal(cf.boxEndIndex - cf.boxStartIndex, 0);
-        t.notOk(cf.circleLineHeight);
+        t.notOk(cf.circleDiameter);
         t.end();
     });
 
@@ -66,7 +66,7 @@ test('CollisionFeature', (t) => {
         const anchor = new Anchor(505, 95, 0, 1);
         const cf = new CollisionFeature(collisionBoxArray, anchor, 0, 0, 0, shapedText, 1, 0, true);
         t.equal(cf.boxEndIndex - cf.boxStartIndex, 0);
-        t.notOk(cf.circleLineHeight);
+        t.notOk(cf.circleDiameter);
         t.end();
     });
 
@@ -81,7 +81,7 @@ test('CollisionFeature', (t) => {
         const anchor = new Anchor(505, 95, 0, 1);
         const cf = new CollisionFeature(collisionBoxArray, anchor, 0, 0, 0, shapedText, 1, 0, true);
         t.equal(cf.boxEndIndex - cf.boxStartIndex, 0);
-        t.equal(cf.circleLineHeight, 10);
+        t.equal(cf.circleDiameter, 10);
         t.end();
     });
 

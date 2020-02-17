@@ -15,11 +15,11 @@ import type Anchor from './anchor';
 class CollisionFeature {
     boxStartIndex: number;
     boxEndIndex: number;
-    circleLineHeight: ?number;
+    circleDiameter: ?number;
 
     /**
      * Create a CollisionFeature, adding its collision box data to the given collisionBoxArray in the process.
-     * For line aligned labels a collision circle line height is computed instead.
+     * For line aligned labels a collision circle diameter is computed instead.
      *
      * @param anchor The point along the line around which the label is anchored.
      * @param shaped The text or icon shaping results.
@@ -57,7 +57,7 @@ class CollisionFeature {
             if (height > 0) {
                 // set minimum box height to avoid very many small labels
                 height = Math.max(10, height);
-                this.circleLineHeight = height;
+                this.circleDiameter = height;
             }
         } else {
             let y1 = shaped.top * boxScale - padding;

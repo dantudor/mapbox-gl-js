@@ -148,7 +148,7 @@ class CollisionIndex {
             // Tolerate a slightly longer distance than radius * 2.0 between two adjacent circles
             const circleDist = radius * 2.5;
 
-            // The path might need to be converted into screen space if pitched map is used as the label space
+            // The path might need to be converted into screen space if a pitched map is used as the label space
             if (labelToScreenMatrix) {
                 const screenSpacePath = projectedPath.map(p => projection.project(p, labelToScreenMatrix));
 

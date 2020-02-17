@@ -590,7 +590,7 @@ export class Placement {
                 const fontSize = symbolSize.evaluateSizeForFeature(bucket.textSizeData, partiallyEvaluatedTextSize, placedSymbol);
 
                 const textPixelPadding = layout.get('text-padding');
-                const circlePixelDiameter = symbolInstance.collisionLineHeight;
+                const circlePixelDiameter = symbolInstance.collisionCircleDiameter;
 
                 placedGlyphCircles = this.collisionIndex.placeCollisionCircles(textAllowOverlap,
                         placedSymbol,

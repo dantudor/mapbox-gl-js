@@ -717,23 +717,23 @@ function addSymbol(bucket: SymbolBucket,
     // Check if runtime collision circles should be used for any of the collision features.
     // It is enough to choose the tallest feature shape as circles are always placed on a line.
     // All measurements are in glyph metrics and later converted into pixels using proper font size "layoutTextSize"
-    let collisionLineHeight = -1;
+    let collisionCircleDiameter = -1;
 
     const getCollisionCircleHeight = (feature: CollisionFeature, prevHeight: number): number => {
-        if (feature && feature.circleLineHeight) 
-            return Math.max(feature.circleLineHeight, prevHeight);
+        if (feature && feature.circleDiameter) 
+            return Math.max(feature.circleDiameter, prevHeight);
         return prevHeight;
     };
 
-    collisionLineHeight = getCollisionCircleHeight(textCollisionFeature, collisionLineHeight);
-    collisionLineHeight = getCollisionCircleHeight(verticalTextCollisionFeature, collisionLineHeight);
-    collisionLineHeight = getCollisionCircleHeight(iconCollisionFeature, collisionLineHeight);
-    collisionLineHeight = getCollisionCircleHeight(verticalIconCollisionFeature, collisionLineHeight);
-    const useRuntimeCollisionCircles = (collisionLineHeight > -1) ? 1 : 0;
+    collisionCircleDiameter = getCollisionCircleHeight(textCollisionFeature, collisionCircleDiameter);
+    collisionCircleDiameter = getCollisionCircleHeight(verticalTextCollisionFeature, collisionCircleDiameter);
+    collisionCircleDiameter = getCollisionCircleHeight(iconCollisionFeature, collisionCircleDiameter);
+    collisionCircleDiameter = getCollisionCircleHeight(verticalIconCollisionFeature, collisionCircleDiameter);
+    const useRuntimeCollisionCircles = (collisionCircleDiameter > -1) ? 1 : 0;
 
     // Convert circle collision height into pixels
     if (useRuntimeCollisionCircles)
-        collisionLineHeight *= layoutTextSize / ONE_EM;
+        collisionCircleDiameter *= layoutTextSize / ONE_EM;
 
     if (bucket.glyphOffsetArray.length >= SymbolBucket.MAX_GLYPHS) warnOnce(
         "Too many glyphs being rendered in a tile. See https://github.com/mapbox/mapbox-gl-js/issues/2907"
@@ -771,7 +771,7 @@ function addSymbol(bucket: SymbolBucket,
         textOffset0,
         textOffset1,
         useRuntimeCollisionCircles,
-        collisionLineHeight);
+        collisionCircleDiameter);
 }
 
 function anchorIsTooClose(bucket: any, text: string, repeatDistance: number, anchor: Point) {

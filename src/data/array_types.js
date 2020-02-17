@@ -971,7 +971,7 @@ class SymbolInstanceStruct extends Struct {
     textOffset0: number;
     textOffset1: number;
     runtimeCollisionCircles: number;
-    collisionPaddingY: Number;
+    collisionCircleDiameter: number;
     get anchorX() { return this._structArray.int16[this._pos2 + 0]; }
     set anchorX(x: number) { this._structArray.int16[this._pos2 + 0] = x; }
     get anchorY() { return this._structArray.int16[this._pos2 + 1]; }
@@ -1026,8 +1026,8 @@ class SymbolInstanceStruct extends Struct {
     set textOffset0(x: number) { this._structArray.float32[this._pos4 + 14] = x; }
     get textOffset1() { return this._structArray.float32[this._pos4 + 15]; }
     set textOffset1(x: number) { this._structArray.float32[this._pos4 + 15] = x; }
-    get collisionLineHeight() { return this._structArray.float32[this._pos4 + 16]; }
-    set collisionLineHeight(x: number) { this._structArray.float32[this._pos4 + 16] = x; }
+    get collisionCircleDiameter() { return this._structArray.float32[this._pos4 + 16]; }
+    set collisionCircleDiameter(x: number) { this._structArray.float32[this._pos4 + 16] = x; }
 }
 
 SymbolInstanceStruct.prototype.size = 68;
