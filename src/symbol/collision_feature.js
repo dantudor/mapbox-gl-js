@@ -57,7 +57,7 @@ class CollisionFeature {
             if (height > 0) {
                 // set minimum box height to avoid very many small labels
                 height = Math.max(10, height);
-                this.circleLineHeight = bottom - top;
+                this.circleLineHeight = height;
             }
         } else {
             let y1 = shaped.top * boxScale - padding;
@@ -98,8 +98,7 @@ class CollisionFeature {
                 y1 = Math.min(tl.y, tr.y, bl.y, br.y);
                 y2 = Math.max(tl.y, tr.y, bl.y, br.y);
             }
-            collisionBoxArray.emplaceBack(anchor.x, anchor.y, x1, y1, x2, y2, featureIndex, sourceLayerIndex, bucketIndex,
-                /*0,*/ 0);  // radius pois
+            collisionBoxArray.emplaceBack(anchor.x, anchor.y, x1, y1, x2, y2, featureIndex, sourceLayerIndex, bucketIndex, 0);
         }
 
         this.boxEndIndex = collisionBoxArray.length;

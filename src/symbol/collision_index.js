@@ -143,10 +143,10 @@ class CollisionIndex {
             const first = firstAndLastGlyph.first;
             const last = firstAndLastGlyph.last;
 
+            let projectedPath = first.path.slice(1).reverse().concat(last.path.slice(1));
+
             // Tolerate a slightly longer distance than radius * 2.0 between two adjacent circles
             const circleDist = radius * 2.5;
-
-            let projectedPath = first.path.slice(1).reverse().concat(last.path.slice(1));
 
             // The path might need to be converted into screen space if pitched map is used as the label space
             if (labelToScreenMatrix) {
@@ -164,7 +164,7 @@ class CollisionIndex {
 
             if (projectedPath.length > 0) {
                 // Quickly check if the path is fully inside or outside of the padded collision region.
-                // For overlapping paths we'll only create collision circles for visible segments
+                // For overlapping paths we'll only create collision circles for the visible segments
                 let minPoint = projectedPath[0].clone();
                 let maxPoint = projectedPath[1].clone();
 
