@@ -64,7 +64,7 @@ class CollisionFeature {
             let y2 = shaped.bottom * boxScale + padding;
             let x1 = shaped.left * boxScale - padding;
             let x2 = shaped.right * boxScale + padding;
-    
+
             const collisionPadding = shaped.collisionPadding;
             if (collisionPadding) {
                 x1 -= collisionPadding[0] * boxScale;

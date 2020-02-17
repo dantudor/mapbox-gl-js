@@ -1,6 +1,6 @@
 import {test} from '../../util/test';
 import Point from '@mapbox/point-geometry';
-import clipLine from '../../../src/symbol/clip_line'
+import clipLine from '../../../src/symbol/clip_line';
 
 test('clipLines', (t) => {
 
@@ -11,7 +11,7 @@ test('clipLines', (t) => {
 
     const clipLineTest = (lines) => {
         return clipLine(lines, minX, minY, maxX, maxY);
-    }
+    };
 
     t.test('Single line fully inside', (t) => {
         const line = [

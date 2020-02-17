@@ -15,7 +15,6 @@ import type StyleLayer from '../style/style_layer';
 
 import type Tile from '../source/tile';
 import type SymbolBucket, {CollisionArrays, SingleCollisionBox} from '../data/bucket/symbol_bucket';
-import type {mat4} from 'gl-matrix';
 import type {CollisionBoxArray, CollisionVertexArray, SymbolInstance} from '../data/array_types';
 import type FeatureIndex from '../data/feature_index';
 import type {OverscaledTileID} from '../source/tile_id';
@@ -69,13 +68,12 @@ class CollisionCircleArray {
     invProjMatrix: mat4;
     viewportMatrix: mat4;
     circles: Array<number>;
-    bucket: ?SymbolBucket;
+    bucket: SymbolBucket;
 
     constructor() {
         this.invProjMatrix = mat4.create();
         this.viewportMatrix = mat4.create();
         this.circles = [];
-        this.bucket = null;
     }
 }
 
@@ -212,7 +210,7 @@ export class Placement {
     collisionGroups: CollisionGroups;
     prevPlacement: ?Placement;
     zoomAtLastRecencyCheck: number;
-    collisionCircleArrays: {[number]: CollisionCircleArray};
+    collisionCircleArrays: {[any]: CollisionCircleArray};
 
     constructor(transform: Transform, fadeDuration: number, crossSourceCollisions: boolean, prevPlacement?: Placement) {
         this.transform = transform.clone();
@@ -372,7 +370,6 @@ export class Placement {
             posMatrix,
             textLabelPlaneMatrix,
             labelToScreenMatrix,
-            scale,
             textPixelRatio,
             holdingForFade,
             collisionBoxArray,
@@ -605,7 +602,7 @@ export class Placement {
                         collisionGroup.predicate,
                         circlePixelDiameter,
                         textPixelPadding);
-                
+
                 assert(!placedGlyphCircles.circles.length || (!placedGlyphCircles.collisionDetected || showCollisionBoxes));
                 // If text-allow-overlap is set, force "placedCircles" to true
                 // In theory there should always be at least one circle placed
@@ -683,7 +680,7 @@ export class Placement {
                     if (circleArray === undefined)
                         circleArray = this.collisionCircleArrays[id] = new CollisionCircleArray();
 
-                    for (let i = 0; i < placedGlyphCircles.circles.length; i+=4) {
+                    for (let i = 0; i < placedGlyphCircles.circles.length; i += 4) {
                         circleArray.circles.push(placedGlyphCircles.circles[i + 0]);              // x
                         circleArray.circles.push(placedGlyphCircles.circles[i + 1]);              // y
                         circleArray.circles.push(placedGlyphCircles.circles[i + 2]);              // radius
@@ -848,7 +845,7 @@ export class Placement {
             bucket.placementViewportMatrix = instance.viewportMatrix;
 
             bucket.collisionCircleArray.clear();
-            for (let i = 0; i < instance.circles.length; i+=4) {
+            for (let i = 0; i < instance.circles.length; i += 4) {
                 bucket.collisionCircleArray.emplaceBack(
                     instance.circles[i + 0],
                     instance.circles[i + 1],

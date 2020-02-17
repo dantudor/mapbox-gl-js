@@ -357,7 +357,7 @@ class SymbolBucket implements Bucket {
         this.sortKeyRanges = [];
 
         this.collisionCircleArray = new StructArrayLayout4f16();
-        this.placementInvProjMatrix = mat4.identity([])
+        this.placementInvProjMatrix = mat4.identity([]);
         this.placementViewportMatrix = mat4.identity([]);
 
         const layer = this.layers[0];

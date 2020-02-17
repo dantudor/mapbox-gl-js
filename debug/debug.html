@@ -116,9 +116,6 @@ map.on('load', function() {
     map.on('mouseleave', 'marker', function(e) {
         map.setFilter('marker-hover', ['==', 'name', '']);
     });
-
-    map.setLayoutProperty('road-label-medium', 'text-field', ["format", ["get", "name_en"],["image","aquarium-11"]], null);
-    map.setLayoutProperty('road-label-small', 'text-field', ["format", ["get", "name_en"],["image","aquarium-11"]], null);
 });
 
 map.on('click', function(e) {

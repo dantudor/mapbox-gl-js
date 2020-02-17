@@ -10,17 +10,17 @@ import StencilMode from '../gl/stencil_mode';
 import CullFaceMode from '../gl/cull_face_mode';
 import {collisionUniformValues, collisionCircleUniformValues} from './program/collision_program';
 
-import {StructArrayLayout2i4, StructArrayLayout3ui6} from '../data/array_types'
+import {StructArrayLayout2i4, StructArrayLayout3ui6} from '../data/array_types';
 import {collisionCircleLayout} from '../data/bucket/symbol_attributes';
 import SegmentVector from '../data/segment';
-import { mat4 } from 'gl-matrix';
+import {mat4} from 'gl-matrix';
 import VertexBuffer from '../gl/vertex_buffer';
 import IndexBuffer from '../gl/index_buffer';
 
 export default drawCollisionDebug;
 
-let quadVertices: ?StructArrayLayout2i4 = undefined;
-let quadTriangles: ?StructArrayLayout3ui6 = undefined;
+let quadVertices: ?StructArrayLayout2i4;
+let quadTriangles: ?StructArrayLayout3ui6;
 
 function drawCollisionDebug(painter: Painter, sourceCache: SourceCache, layer: StyleLayer, coords: Array<OverscaledTileID>, translate: [number, number], translateAnchor: 'map' | 'viewport', isText: boolean) {
     const context = painter.context;
@@ -58,15 +58,15 @@ function drawCollisionDebug(painter: Painter, sourceCache: SourceCache, layer: S
 function drawCollisionCircles(painter: Painter, sourceCache: SourceCache, layer: StyleLayer, coords: Array<OverscaledTileID>, translate: [number, number], translateAnchor: 'map' | 'viewport') {
     // Collision circle rendering is done by using simple shader batching scheme where dynamic properties of
     // circles are passed to the GPU using shader uniforms. Circles are first encoded into 4-component vectors
-    // (center_x, center_y, radius, flag) and then uploaded in batches as "uniform vec4 u_quads[N]". 
+    // (center_x, center_y, radius, flag) and then uploaded in batches as "uniform vec4 u_quads[N]".
     // Vertex data is just a collection of incremental index values pointing to the quads-array.
-    // 
+    //
     // If one quad uses 4 vertices then all required values can be deduced from the index value:
     //   int quad_idx = int(vertex.idx / 4);
     //   int corner_idx = int(vertex.idx % 4);
-    // 
+    //
     // OpenGL ES 2.0 spec defines that the maximum number of supported vertex uniform vectors (vec4) should be
-    // at least 128. Choosing a safe value 64 for the quad array should leave enough space for rest of the 
+    // at least 128. Choosing a safe value 64 for the quad array should leave enough space for rest of the
     // uniform variables.
     const maxQuadsPerDrawCall = 64;
 
@@ -105,7 +105,7 @@ function drawCollisionCircles(painter: Painter, sourceCache: SourceCache, layer:
         // required for transforming points from previous screen space to the current one
         const batchInvTransform = mat4.create();
         const batchTransform = posMatrix;
-        
+
         mat4.mul(batchInvTransform, bucket.placementInvProjMatrix, painter.transform.glCoordMatrix);
         mat4.mul(batchInvTransform, batchInvTransform, bucket.placementViewportMatrix);
 
@@ -144,7 +144,7 @@ function drawCollisionCircles(painter: Painter, sourceCache: SourceCache, layer:
     quadVertexBuffer.destroy();
 }
 
-function drawBatch(painter: Painter, proj: mat4, invPrevProj: mat4, quads: any, numQuads: number, layerId: mumber, vb: VertexBuffer, ib: IndexBuffer) {
+function drawBatch(painter: Painter, proj: mat4, invPrevProj: mat4, quads: any, numQuads: number, layerId: string, vb: VertexBuffer, ib: IndexBuffer) {
     const context = painter.context;
     const gl = context.gl;
     const circleProgram = painter.useProgram('collisionCircle');

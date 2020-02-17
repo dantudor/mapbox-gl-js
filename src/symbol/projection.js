@@ -215,7 +215,7 @@ function updateLineLabels(bucket: SymbolBucket,
     }
 }
 
-function placeFirstAndLastGlyph(fontScale: number, glyphOffsetArray: GlyphOffsetArray, lineOffsetX: number, lineOffsetY: number, flip: boolean, anchorPoint: Point, tileAnchorPoint: Point, symbol: any, lineVertexArray: SymbolLineVertexArray, labelPlaneMatrix: mat4, projectionCache: any, conservativeOffsets: boolean) {
+function placeFirstAndLastGlyph(fontScale: number, glyphOffsetArray: GlyphOffsetArray, lineOffsetX: number, lineOffsetY: number, flip: boolean, anchorPoint: Point, tileAnchorPoint: Point, symbol: any, lineVertexArray: SymbolLineVertexArray, labelPlaneMatrix: mat4, projectionCache: any, conservativePlacement: boolean) {
     const glyphEndIndex = symbol.glyphStartIndex + symbol.numGlyphs;
     const lineStartIndex = symbol.lineStartIndex;
     const lineEndIndex = symbol.lineStartIndex + symbol.lineLength;
@@ -223,7 +223,7 @@ function placeFirstAndLastGlyph(fontScale: number, glyphOffsetArray: GlyphOffset
     let firstGlyphOffset = glyphOffsetArray.getoffsetX(symbol.glyphStartIndex);
     let lastGlyphOffset = glyphOffsetArray.getoffsetX(glyphEndIndex - 1);
 
-    if (conservativeOffsets) {
+    if (conservativePlacement) {
         const maxOffset = Math.max(Math.abs(firstGlyphOffset), Math.abs(lastGlyphOffset));
         firstGlyphOffset = -maxOffset;
         lastGlyphOffset = maxOffset;
@@ -378,7 +378,6 @@ function placeGlyphAlongLine(offsetX: number,
         lineStartIndex + anchorSegment :
         lineStartIndex + anchorSegment + 1;
 
-    const initialIndex = currentIndex;
     let current = anchorPoint;
     let prev = anchorPoint;
     let distanceToPrev = 0;

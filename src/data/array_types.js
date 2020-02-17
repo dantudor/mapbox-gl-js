@@ -317,7 +317,7 @@ class StructArrayLayout6i1ul2ui2i24 extends StructArray {
         this.uint16 = new Uint16Array(this.arrayBuffer);
     }
 
-    emplaceBack(v0: number, v1: number, v2: number, v3: number, v4: number, v5: number, v6: number, v7: number, v8: number, v9: number, v10: number) {
+    emplaceBack(v0: number, v1: number, v2: number, v3: number, v4: number, v5: number, v6: number, v7: number, v8: number, v9: number) {
         const i = this.length;
         this.resize(i + 1);
         return this.emplace(i, v0, v1, v2, v3, v4, v5, v6, v7, v8, v9);
@@ -336,7 +336,6 @@ class StructArrayLayout6i1ul2ui2i24 extends StructArray {
         this.uint16[o2 + 8] = v7;
         this.uint16[o2 + 9] = v8;
         this.int16[o2 + 10] = v9;
-        //this.int16[o2 + 11] = v10;
         return i;
     }
 }
@@ -1017,7 +1016,7 @@ class SymbolInstanceStruct extends Struct {
     get numVerticalIconVertices() { return this._structArray.uint16[this._pos2 + 21]; }
     set numVerticalIconVertices(x: number) { this._structArray.uint16[this._pos2 + 21] = x; }
     get runtimeCollisionCircles() { return this._structArray.uint16[this._pos2 + 22]; }
-    set runtimeCollisionCircles(x: number) { this._structArray.uint16[this._pos2 + 22] = x; }    
+    set runtimeCollisionCircles(x: number) { this._structArray.uint16[this._pos2 + 22] = x; }
     get crossTileID() { return this._structArray.uint32[this._pos4 + 12]; }
     set crossTileID(x: number) { this._structArray.uint32[this._pos4 + 12] = x; }
     get textBoxScale() { return this._structArray.float32[this._pos4 + 13]; }
@@ -1156,11 +1155,9 @@ export {
     StructArrayLayout4i4ui4i24,
     StructArrayLayout3f12,
     StructArrayLayout1ul4,
-    //StructArrayLayout6i1ul2ui2i24,
     StructArrayLayout2i2i2i12,
     StructArrayLayout2ub2f12,
     StructArrayLayout2i2ui3ul3ui2f3ub1ul1i48,
-    //StructArrayLayout8i14ui1ul3f60,
     StructArrayLayout1f4,
     StructArrayLayout3i6,
     StructArrayLayout1ul2ui8,
