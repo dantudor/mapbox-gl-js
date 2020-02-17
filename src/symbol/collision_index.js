@@ -2,6 +2,7 @@
 
 import Point from '@mapbox/point-geometry';
 import clipLine from './clip_line'
+import PathInterpolator from './path_interpolator';
 
 import * as intersectionTests from '../util/intersection_tests';
 import Grid from './grid_index';
@@ -136,6 +137,7 @@ class CollisionIndex {
             const radius = circlePixelDiameter * 0.5 * perspectiveRatio + textPixelPadding;
             const screenPlaneMin = new Point(-viewportPadding, -viewportPadding);
             const screenPlaneMax = new Point(this.screenRightBoundary, this.screenBottomBoundary);
+            const interpolator = new PathInterpolator();
 
             // Construct projected path from projected line vertices. Anchor points are ignored and removed
             const first = firstAndLastGlyph.first;
@@ -153,7 +155,7 @@ class CollisionIndex {
                 // Do not try to place collision circles if even of the points is behind the camera.
                 // This is a plausible scenario with big camera pitch angles
                 if (screenSpacePath.some(point => point.signedDistanceFromCamera <= 0))
-                    projectedPath = []
+                    projectedPath = [];
                 else
                     projectedPath = screenSpacePath.map(p => p.point);
             }
@@ -184,46 +186,21 @@ class CollisionIndex {
             }
 
             for (const seg of segments) {
-                const distToPoints = [0.0];
+                // interpolate positions for collision circles. Add small padding to both ends of the segment
+                interpolator.reset(seg, radius * 0.5);
 
-                // Compute cumulative distance from first point to every other point in the segment.
-                // Last entry in the array is total length of the path
-                for (let i = 1; i < seg.length; i++) {
-                    distToPoints[i] = distToPoints[i - 1] + seg[i].dist(seg[i - 1]);
-                }
-
-                // interpolate positions for collision circles.
-                // Apply small padding to both ends of the segment
-                let segLength = distToPoints[distToPoints.length - 1];
+                const segLength = interpolator.length;
                 let numCircles = 0;
-                let padding = 0;
-
+  
                 if (segLength <= radius) {
-                    // Segment is shorter than diameter of a single circle.
-                    // Only one circle should be placed in the middle of the segment
-                    padding = segLength * 0.5;
-                    segLength = 0.0;
                     numCircles = 1;
                 } else {
-                    padding = radius * 0.5;
-                    segLength -= padding * 2.0;
                     numCircles = Math.ceil(segLength / circleDist) + 1;
                 }
 
-                let idxOfNextSegPoint = 1;
-                let distOfNextSegPoint = distToPoints[idxOfNextSegPoint];
-
                 for (let i = 0; i < numCircles; i++) {
-                    const distToSegStart = i / (Math.max(numCircles - 1, 1)) * segLength + padding;
-
-                    while (distOfNextSegPoint < distToSegStart && idxOfNextSegPoint < distToPoints.length) {
-                        distOfNextSegPoint = distToPoints[++idxOfNextSegPoint];
-                    }
-
-                    const idxOfPrevSegPoint = idxOfNextSegPoint - 1;
-                    const lineLength = distOfNextSegPoint - distToPoints[idxOfPrevSegPoint];
-                    const t = lineLength > 0 ? (distToSegStart - distToPoints[idxOfPrevSegPoint]) / lineLength : 0;
-                    const circlePosition = seg[idxOfPrevSegPoint].mult(1.0 - t).add(seg[idxOfNextSegPoint].mult(t));
+                    const t = i / Math.max(numCircles - 1, 1);
+                    const circlePosition = interpolator.lerp(t);
 
                     // add viewport padding to the position and perform initial collision check
                     const centerX = circlePosition.x + viewportPadding;
@@ -424,7 +401,7 @@ function computePointClipRegion(point: Point, minBoundary: Point, maxBoundary: P
 
 /*
 * Computes a region code for a rect in a rectangular area using Cohen–Sutherland clipping algorithm.
-* A rectangle inside a single region is not clipping with any of the borders.
+* A rectangle inside a single region is not overlapping with any of the borders.
 *
 * Returns a negative value if the rect is overlapping with multiple regions
 */
